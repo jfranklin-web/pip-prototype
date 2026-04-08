@@ -28,7 +28,7 @@ interface Props {
   onNext: () => void;
 }
 
-function getDefaultProduct(corridorId: string, businessType: string): ProductId {
+function getDefaultProduct(_corridorId: string, businessType: string): ProductId {
   if (businessType === 'connect_platform') return 'fiat_payouts';
   return 'fiat_payouts'; // default recommendation
 }
@@ -38,7 +38,7 @@ function getStickerAndFloor(corridorId: string, productId: ProductId, monthlyVol
   if (!product || !product.available) return { sticker: 0, floor: 0, stripeCost: 0 };
 
   if (productId === 'fiat_payouts') {
-    const { guidance, floor } = getFiatGuidanceFee(monthlyVolume);
+    const { floor } = getFiatGuidanceFee(monthlyVolume);
     // sticker includes XB and FX; guidance is just the base fee adjustment
     const xbAndFx = product.stickerPrice - 1.50;
     return {
