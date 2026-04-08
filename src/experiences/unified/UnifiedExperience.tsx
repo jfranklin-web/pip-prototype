@@ -4,10 +4,11 @@ import { ProtoHeader } from '../../components/ProtoHeader';
 import { Footer } from '../../components/Footer';
 import { GoalStep } from './GoalStep';
 import { CorridorStep } from './CorridorStep';
+import { EligibilityStep } from './EligibilityStep';
 import { ResultsStep } from './ResultsStep';
 import styles from './UnifiedExperience.module.css';
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 export interface Profile {
   customerName: string;
@@ -23,7 +24,7 @@ interface Props {
   onShowChangelog: () => void;
 }
 
-const STEP_LABELS = ['Your goals', 'Corridors', 'Results'];
+const STEP_LABELS = ['Your goals', 'Corridors', 'Eligibility', 'Results'];
 
 export function UnifiedExperience({ onShowAbout, onShowChangelog }: Props) {
   const [step, setStep] = useState<Step>(1);
@@ -82,16 +83,26 @@ export function UnifiedExperience({ onShowAbout, onShowChangelog }: Props) {
         {step === 2 && (
           <CorridorStep
             selectedCorridors={selectedCorridors}
+            profile={profile}
+            onProfileChange={setProfile}
             onToggle={toggleCorridor}
             onBack={() => setStep(1)}
             onNext={() => setStep(3)}
           />
         )}
         {step === 3 && (
+          <EligibilityStep
+            profile={profile}
+            onChange={setProfile}
+            onBack={() => setStep(2)}
+            onNext={() => setStep(4)}
+          />
+        )}
+        {step === 4 && (
           <ResultsStep
             profile={profile}
             selectedCorridors={selectedCorridors}
-            onBack={() => setStep(2)}
+            onBack={() => setStep(3)}
             onStartOver={() => { setStep(1); setSelectedCorridors([]); }}
           />
         )}

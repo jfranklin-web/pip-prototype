@@ -1,14 +1,18 @@
+import type { Profile } from './UnifiedExperience';
 import { CORRIDORS } from '../../data/mockData';
+import { formatVolume } from '../../utils/pricing';
 import styles from './CorridorStep.module.css';
 
 interface Props {
   selectedCorridors: string[];
+  profile: Profile;
+  onProfileChange: (updated: Profile) => void;
   onToggle: (id: string) => void;
   onBack: () => void;
   onNext: () => void;
 }
 
-export function CorridorStep({ selectedCorridors, onToggle, onBack, onNext }: Props) {
+export function CorridorStep({ selectedCorridors, profile, onProfileChange, onToggle, onBack, onNext }: Props) {
   return (
     <div className={styles.step}>
       <div className={styles.stepHeader}>
@@ -51,6 +55,68 @@ export function CorridorStep({ selectedCorridors, onToggle, onBack, onNext }: Pr
         </div>
       )}
 
+      {/* Volume sliders */}
+      <div className={styles.slidersSection}>
+        <div className={styles.slidersSectionHeader}>
+          <span className={styles.slidersSectionTitle}>Volume and payout size</span>
+          <span className={styles.slidersSectionDesc}>Adjusts the economics in your results</span>
+        </div>
+        <div className={styles.slidersGrid}>
+          <div className={styles.sliderField}>
+            <div className={styles.sliderLabelRow}>
+              <label className={styles.sliderLabel} htmlFor="monthlyVol">Monthly payout volume</label>
+              <span className={styles.sliderValue}>{formatVolume(profile.monthlyVolume)}</span>
+            </div>
+            <input
+              id="monthlyVol"
+              type="range"
+              className={styles.slider}
+              min={100_000}
+              max={100_000_000}
+              step={100_000}
+              value={profile.monthlyVolume}
+              onChange={(e) => onProfileChange({ ...profile, monthlyVolume: parseInt(e.target.value) })}
+            />
+            <div className={styles.sliderRange}><span>$100K</span><span>$100M</span></div>
+          </div>
+
+          <div className={styles.sliderField}>
+            <div className={styles.sliderLabelRow}>
+              <label className={styles.sliderLabel} htmlFor="avgPayout">Avg payout amount</label>
+              <span className={styles.sliderValue}>${profile.avgPayoutAmount.toLocaleString()}</span>
+            </div>
+            <input
+              id="avgPayout"
+              type="range"
+              className={styles.slider}
+              min={10}
+              max={10_000}
+              step={10}
+              value={profile.avgPayoutAmount}
+              onChange={(e) => onProfileChange({ ...profile, avgPayoutAmount: parseInt(e.target.value) })}
+            />
+            <div className={styles.sliderRange}><span>$10</span><span>$10,000</span></div>
+          </div>
+        </div>
+
+        <div className={styles.volumeStats}>
+          <div className={styles.volumeStat}>
+            <span className={styles.volumeStatLabel}>Est. monthly payouts</span>
+            <span className={styles.volumeStatValue}>
+              ~{Math.round(profile.monthlyVolume / profile.avgPayoutAmount).toLocaleString()}
+            </span>
+          </div>
+          <div className={styles.volumeStat}>
+            <span className={styles.volumeStatLabel}>Volume tier</span>
+            <span className={styles.volumeStatValue}>
+              {profile.monthlyVolume >= 50_000_000 ? '$50M+' :
+               profile.monthlyVolume >= 10_000_000 ? '$10M–$50M' :
+               profile.monthlyVolume >= 1_000_000 ? '$1M–$10M' : 'Under $1M'}
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className={styles.footer}>
         <button className={styles.backBtn} onClick={onBack}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -59,7 +125,7 @@ export function CorridorStep({ selectedCorridors, onToggle, onBack, onNext }: Pr
           Back
         </button>
         <button className={styles.nextBtn} onClick={onNext} disabled={selectedCorridors.length === 0}>
-          See results
+          Sender eligibility
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>

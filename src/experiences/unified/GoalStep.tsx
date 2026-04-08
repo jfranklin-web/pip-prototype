@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import type { BusinessType, UseCaseId, TransactionType } from '../../data/types';
+import type { UseCaseId, TransactionType } from '../../data/types';
 import type { Profile } from './UnifiedExperience';
 import { USE_CASES } from '../../data/mockData';
 import { findSeedProfile } from '../../data/seedProfiles';
-import { formatVolume } from '../../utils/pricing';
 import styles from './GoalStep.module.css';
+
+const GOAL_IDS_TO_SHOW: UseCaseId[] = ['lowest_cost', 'fastest_settlement', 'high_volatility'];
 
 const TRANSACTION_TYPES: { id: TransactionType; label: string; description: string; icon: string }[] = [
   {
@@ -19,12 +20,6 @@ const TRANSACTION_TYPES: { id: TransactionType; label: string; description: stri
     description: 'Move money to your own bank accounts in another country',
     icon: '🏦',
   },
-];
-
-const BUSINESS_TYPES: { id: BusinessType; label: string }[] = [
-  { id: 'direct_us', label: 'US Direct' },
-  { id: 'direct_uk', label: 'UK Direct' },
-  { id: 'connect_platform', label: 'Connect platform' },
 ];
 
 interface Props {
@@ -154,7 +149,7 @@ export function GoalStep({ profile, onChange, onApplyCorridors, onNext }: Props)
           </div>
         </div>
         <div className={styles.goalsGrid}>
-          {USE_CASES.map((uc) => {
+          {USE_CASES.filter((uc) => GOAL_IDS_TO_SHOW.includes(uc.id)).map((uc) => {
             const isSelected = profile.selectedGoals.includes(uc.id);
             return (
               <button
@@ -177,93 +172,6 @@ export function GoalStep({ profile, onChange, onApplyCorridors, onNext }: Props)
               </button>
             );
           })}
-        </div>
-      </div>
-
-      <div className={styles.divider} />
-
-      {/* Volume sliders */}
-      <div className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.sectionNum}>3</span>
-          <div>
-            <h2 className={styles.sectionTitle}>Volume and payout size</h2>
-            <p className={styles.sectionDesc}>Used to estimate economics in the results.</p>
-          </div>
-        </div>
-
-        <div className={styles.slidersGrid}>
-          <div className={styles.sliderField}>
-            <div className={styles.sliderLabelRow}>
-              <label className={styles.sliderLabel} htmlFor="monthlyVol">Monthly payout volume</label>
-              <span className={styles.sliderValue}>{formatVolume(profile.monthlyVolume)}</span>
-            </div>
-            <input
-              id="monthlyVol"
-              type="range"
-              className={styles.slider}
-              min={100_000}
-              max={100_000_000}
-              step={100_000}
-              value={profile.monthlyVolume}
-              onChange={(e) => onChange({ ...profile, monthlyVolume: parseInt(e.target.value) })}
-            />
-            <div className={styles.sliderRange}><span>$100K</span><span>$100M</span></div>
-          </div>
-
-          <div className={styles.sliderField}>
-            <div className={styles.sliderLabelRow}>
-              <label className={styles.sliderLabel} htmlFor="avgPayout">Avg payout amount</label>
-              <span className={styles.sliderValue}>${profile.avgPayoutAmount}</span>
-            </div>
-            <input
-              id="avgPayout"
-              type="range"
-              className={styles.slider}
-              min={10}
-              max={10_000}
-              step={10}
-              value={profile.avgPayoutAmount}
-              onChange={(e) => onChange({ ...profile, avgPayoutAmount: parseInt(e.target.value) })}
-            />
-            <div className={styles.sliderRange}><span>$10</span><span>$10,000</span></div>
-          </div>
-        </div>
-
-        <div className={styles.volumeStats}>
-          <div className={styles.volumeStat}>
-            <span className={styles.volumeStatLabel}>Est. monthly payouts</span>
-            <span className={styles.volumeStatValue}>
-              ~{Math.round(profile.monthlyVolume / profile.avgPayoutAmount).toLocaleString()}
-            </span>
-          </div>
-          <div className={styles.volumeStat}>
-            <span className={styles.volumeStatLabel}>Volume tier</span>
-            <span className={styles.volumeStatValue}>
-              {profile.monthlyVolume >= 50_000_000 ? '$50M+' :
-               profile.monthlyVolume >= 10_000_000 ? '$10M-$50M' :
-               profile.monthlyVolume >= 1_000_000 ? '$1M-$10M' : 'Under $1M'}
-            </span>
-          </div>
-        </div>
-
-        {/* Business type — smaller, at the bottom */}
-        <div className={styles.businessTypeRow}>
-          <span className={styles.btRowLabel}>Sender eligibility</span>
-          <div className={styles.btButtons}>
-            {BUSINESS_TYPES.map((bt) => (
-              <button
-                key={bt.id}
-                className={`${styles.btBtn} ${profile.businessType === bt.id ? styles.btSelected : ''}`}
-                onClick={() => onChange({ ...profile, businessType: bt.id })}
-              >
-                {bt.label}
-              </button>
-            ))}
-          </div>
-          {profile.businessType === 'connect_platform' && (
-            <span className={styles.btNote}>Connect platforms can only use Fiat Global Payouts.</span>
-          )}
         </div>
       </div>
 
