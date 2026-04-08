@@ -1,0 +1,121 @@
+/* Design tokens matching Compass visual language */
+:root {
+  /* Page & surface */
+  --color-page-bg:      #f9fafb;
+  --color-surface:      #ffffff;
+  --color-surface-hover:#f5f3ff;
+  --color-surface-selected: #ede9fe;
+
+  /* Text */
+  --color-text-primary: #111827;
+  --color-text-secondary:#374151;
+  --color-text-muted:   #6b7280;
+  --color-text-faint:   #9ca3af;
+
+  /* Borders */
+  --color-border:       #e5e7eb;
+  --color-border-light: #f3f4f6;
+  --color-border-focus: #635bff;
+
+  /* Accent — Stripe purple, matches Compass */
+  --color-accent:       #635bff;
+  --color-accent-light: #ede9fe;
+  --color-accent-hover: #4f46e5;
+
+  /* Status: On Track */
+  --color-on-track-bg:    #dcfce7;
+  --color-on-track-text:  #15803d;
+  --color-on-track-dot:   #16a34a;
+
+  /* Status: At Risk */
+  --color-at-risk-bg:     #fef3c7;
+  --color-at-risk-text:   #b45309;
+  --color-at-risk-dot:    #d97706;
+
+  /* Status: Off Track */
+  --color-off-track-bg:   #fee2e2;
+  --color-off-track-text: #b91c1c;
+  --color-off-track-dot:  #dc2626;
+
+  /* Status: Not Scored */
+  --color-not-scored-bg:  #f3f4f6;
+  --color-not-scored-text:#6b7280;
+  --color-not-scored-dot: #9ca3af;
+
+  /* Suggested (system-derived, not yet confirmed) */
+  --color-suggested-bg:     #f5f3ff;
+  --color-suggested-border: #635bff;
+  --color-suggested-text:   #4f46e5;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  --font-size-xs:  11px;
+  --font-size-sm:  12px;
+  --font-size-base:13px;
+  --font-size-md:  14px;
+  --font-size-lg:  16px;
+  --font-size-xl:  20px;
+  --font-size-2xl: 24px;
+
+  /* Radius */
+  --radius-sm:  4px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg:  0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+  --shadow-panel: -2px 0 12px rgba(0,0,0,0.06);
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  /* Surface variants */
+  --color-surface-raised: #f9fafb;
+  --color-border-strong: #9ca3af;
+
+  /* Status color aliases — used by ScorePill and legacy components */
+  --color-green-bg:     #dcfce7;
+  --color-green-text:   #15803d;
+  --color-green-border: #86efac;
+  --color-green-dot:    #16a34a;
+
+  --color-yellow-bg:     #fef3c7;
+  --color-yellow-text:   #b45309;
+  --color-yellow-border: #fcd34d;
+  --color-yellow-dot:    #d97706;
+
+  --color-red-bg:     #fee2e2;
+  --color-red-text:   #b91c1c;
+  --color-red-border: #fca5a5;
+  --color-red-dot:    #dc2626;
+
+  --color-grey-bg:     #f3f4f6;
+  --color-grey-text:   #6b7280;
+  --color-grey-border: #d1d5db;
+  --color-grey-dot:    #9ca3af;
+}
