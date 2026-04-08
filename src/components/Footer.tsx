@@ -14,7 +14,7 @@ export function Footer({ onShowAbout, onShowChangelog }: Props) {
       <div className={styles.left}>
         <div className={styles.metaGrid}>
           <span className={styles.metaLabel}>Built by</span>
-          <span className={styles.metaValue}>jfranklin</span>
+          <span className={styles.metaValue}>jfranklin + emym</span>
         </div>
         <p className={styles.tagline}>Prototyped with love and frustration</p>
       </div>
@@ -35,9 +35,9 @@ export function Footer({ onShowAbout, onShowChangelog }: Props) {
           </button>
           {disclaimerOpen && (
             <div className={styles.disclaimerPopover} role="tooltip">
-              All pricing is illustrative and based on publicly available information.
-              Actual pricing, margins, and discounting terms may differ. This prototype
-              is for internal PM and AE use only.
+              Built by jfranklin and emym. All pricing is illustrative and based on
+              publicly available information. Actual pricing, margins, and discounting
+              terms may differ. For internal use only.
             </div>
           )}
         </div>
