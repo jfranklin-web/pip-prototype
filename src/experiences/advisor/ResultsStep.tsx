@@ -52,7 +52,7 @@ export function ResultsStep({
             .filter(Boolean) as typeof PRODUCTS;
 
           const fits: FitLevel[] = products.map((p) =>
-            computeFit(p, selectedUseCase, selectedBusinessType)
+            computeFit(p, [selectedUseCase], selectedBusinessType, 'me_to_others')
           );
 
           // Find best product to highlight
