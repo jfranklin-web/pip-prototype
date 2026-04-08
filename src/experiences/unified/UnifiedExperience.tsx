@@ -75,6 +75,7 @@ export function UnifiedExperience({ onShowAbout, onShowChangelog }: Props) {
           <GoalStep
             profile={profile}
             onChange={setProfile}
+            onApplyCorridors={setSelectedCorridors}
             onNext={() => setStep(2)}
           />
         )}

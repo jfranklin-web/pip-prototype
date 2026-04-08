@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import type { BusinessType, UseCaseId, TransactionType } from '../../data/types';
 import type { Profile } from './UnifiedExperience';
 import { USE_CASES } from '../../data/mockData';
+import { findSeedProfile } from '../../data/seedProfiles';
 import { formatVolume } from '../../utils/pricing';
 import styles from './GoalStep.module.css';
 
@@ -28,11 +30,35 @@ const BUSINESS_TYPES: { id: BusinessType; label: string }[] = [
 interface Props {
   profile: Profile;
   onChange: (updated: Profile) => void;
+  onApplyCorridors: (corridors: string[]) => void;
   onNext: () => void;
 }
 
-export function GoalStep({ profile, onChange, onNext }: Props) {
+export function GoalStep({ profile, onChange, onApplyCorridors, onNext }: Props) {
   const canContinue = profile.transactionType !== null && profile.selectedGoals.length > 0;
+  const [seedApplied, setSeedApplied] = useState(false);
+
+  const matchedSeed = findSeedProfile(profile.customerName);
+
+  // Reset applied state when name changes to a non-matching or different match
+  useEffect(() => {
+    setSeedApplied(false);
+  }, [profile.customerName]);
+
+  function applyseed() {
+    if (!matchedSeed) return;
+    onChange({
+      ...profile,
+      customerName: matchedSeed.customerName,
+      transactionType: matchedSeed.transactionType,
+      selectedGoals: matchedSeed.selectedGoals,
+      businessType: matchedSeed.businessType,
+      monthlyVolume: matchedSeed.monthlyVolume,
+      avgPayoutAmount: matchedSeed.avgPayoutAmount,
+    });
+    onApplyCorridors(matchedSeed.corridors);
+    setSeedApplied(true);
+  }
 
   function toggleGoal(id: UseCaseId) {
     onChange({
@@ -61,6 +87,27 @@ export function GoalStep({ profile, onChange, onNext }: Props) {
           onChange={(e) => onChange({ ...profile, customerName: e.target.value })}
         />
       </div>
+
+      {matchedSeed && !seedApplied && (
+        <div className={styles.seedBanner}>
+          <div className={styles.seedBannerLeft}>
+            <span className={styles.seedBannerIcon}>✦</span>
+            <div>
+              <div className={styles.seedBannerTitle}>Recognized: {matchedSeed.customerName}</div>
+              <div className={styles.seedBannerDesc}>{matchedSeed.tagline}</div>
+            </div>
+          </div>
+          <button className={styles.seedApplyBtn} onClick={applyseed}>
+            Apply profile
+          </button>
+        </div>
+      )}
+
+      {seedApplied && (
+        <div className={styles.seedApplied}>
+          <span>Profile applied for {matchedSeed?.customerName ?? profile.customerName}. Corridors pre-selected on the next step.</span>
+        </div>
+      )}
 
       <div className={styles.divider} />
 
