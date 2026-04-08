@@ -1,25 +1,46 @@
-import type { ProductData, UseCaseId, BusinessType, FitLevel } from '../data/types';
+import type { ProductData, UseCaseId, BusinessType, FitLevel, TransactionType } from '../data/types';
 
 /**
- * Compute fit level for a product given user selections.
- * Returns 'not_eligible' if the product doesn't work for this business type or isn't available.
+ * Compute the best fit level for a product given multi-select goals + transaction type.
+ * Returns 'not_eligible' first if the product doesn't work at all.
+ * Otherwise returns the best fit across all selected goals.
  */
 export function computeFit(
   product: ProductData,
-  selectedUseCase: UseCaseId,
-  selectedBusinessType: BusinessType
+  selectedGoals: UseCaseId[],
+  selectedBusinessType: BusinessType,
+  transactionType: TransactionType
 ): FitLevel {
-  // Not available
+  // Not available in this corridor
   if (!product.available) return 'not_eligible';
 
   // Business type eligibility
   if (!product.eligibleBusinessTypes.includes(selectedBusinessType)) return 'not_eligible';
 
-  // Fit by use case and product characteristics
+  // Me-to-me: USDC GP and Offramp are partial (recipient = yourself, but crypto wallet still required)
+  // Fiat GP is fine for me-to-me (your own bank account abroad)
+  if (transactionType === 'me_to_me') {
+    if (product.productId === 'usdc_payouts') return 'partial'; // need own crypto wallet
+    if (product.productId === 'offramp') return 'partial'; // need to hold USDC
+  }
+
+  if (selectedGoals.length === 0) return 'partial';
+
+  // Compute fit for each goal, return the best one
+  const FIT_RANK: Record<FitLevel, number> = {
+    best_fit: 4, partial: 3, not_recommended: 2, not_eligible: 1,
+  };
+
+  const fits = selectedGoals.map((goal) => fitForGoal(product, goal));
+  const best = fits.reduce((a, b) => FIT_RANK[a] >= FIT_RANK[b] ? a : b, 'not_recommended' as FitLevel);
+  return best;
+}
+
+function fitForGoal(product: ProductData, goal: UseCaseId): FitLevel {
   const { productId, corridorId } = product;
   const isHighVolatilityCorridor = ['argentina', 'nigeria'].includes(corridorId);
 
-  switch (selectedUseCase) {
+  switch (goal) {
     case 'lowest_cost':
       if (productId === 'usdc_payouts') return 'best_fit';
       if (productId === 'offramp') return 'partial';
@@ -36,19 +57,11 @@ export function computeFit(
       return isHighVolatilityCorridor ? 'not_recommended' : 'partial';
 
     case 'marketplace_gig':
-      // Gig workers: Fiat GP is best (no crypto needed), others require crypto wallet
       if (productId === 'fiat_payouts') return 'best_fit';
-      if (productId === 'offramp') return 'partial'; // no crypto wallet for recipient
-      return 'partial'; // USDC requires crypto wallet -- partial, not best
+      return 'partial';
 
     case 'marketplace_sellers':
-      // Connect platform can only use Fiat GP
-      if (selectedBusinessType === 'connect_platform') {
-        return productId === 'fiat_payouts' ? 'best_fit' : 'not_eligible';
-      }
-      // Direct: all three work, Fiat is most established
       if (productId === 'fiat_payouts') return 'best_fit';
-      if (productId === 'offramp') return 'partial';
       return 'partial';
 
     default:
@@ -56,16 +69,16 @@ export function computeFit(
   }
 }
 
-/**
- * Format a dollar amount for display.
- */
 export function formatPrice(amount: number): string {
   return `$${amount.toFixed(2)}`;
 }
 
-/**
- * Get the Fiat GP discount guidance fee for a given monthly volume.
- */
+export function formatVolume(v: number): string {
+  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+  if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
+  return `$${v}`;
+}
+
 export function getFiatGuidanceFee(monthlyVolume: number): { guidance: number; floor: number } {
   if (monthlyVolume >= 50_000_000) return { guidance: 0.75, floor: 0.50 };
   if (monthlyVolume >= 10_000_000) return { guidance: 1.00, floor: 0.67 };

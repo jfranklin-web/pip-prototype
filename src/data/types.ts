@@ -1,4 +1,5 @@
 export type ProductId = 'fiat_payouts' | 'usdc_payouts' | 'offramp';
+export type TransactionType = 'me_to_me' | 'me_to_others';
 export type BusinessType = 'direct_us' | 'direct_uk' | 'connect_platform';
 export type UseCaseId =
   | 'lowest_cost'
