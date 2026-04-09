@@ -130,11 +130,6 @@ export function GoalStep({ profile, onChange, onApplyCorridors, onNext }: Props)
             </button>
           ))}
         </div>
-        {profile.transactionType === 'me_to_me' && (
-          <div className={styles.infoNote}>
-            For repatriation, Fiat Global Payouts is the primary option. USDC and Offramp are available but require a crypto wallet or USDC holdings on your end.
-          </div>
-        )}
       </div>
 
       <div className={styles.divider} />
