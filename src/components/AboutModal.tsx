@@ -38,25 +38,50 @@ export function AboutModal({ onClose }: Props) {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Two ways to explore</h2>
+            <h2 className={styles.sectionTitle}>How it works</h2>
+            <p className={styles.sectionText}>
+              A single 4-step flow for both PMs and AEs. Start with what the customer is trying to do,
+              select corridors, dial in volume, confirm sender eligibility, and see a full recommendation
+              with availability and economics.
+            </p>
             <div className={styles.featureList}>
               <div className={styles.feature}>
-                <span className={styles.featureIcon}>🧭</span>
+                <span className={styles.featureIcon}>🎯</span>
                 <div>
-                  <span className={styles.featureTitle}>Pricing advisor</span>
+                  <span className={styles.featureTitle}>Goals</span>
                   <span className={styles.featureDesc}>
-                    For PMs: start with what a customer is trying to solve, pick corridors,
-                    and see a side-by-side comparison of all three products with fit ratings and tradeoffs.
+                    Transaction type (pay third parties or repatriate funds) and what you're optimizing
+                    for: lowest cost, fastest settlement, or currency volatility protection.
+                  </span>
+                </div>
+              </div>
+              <div className={styles.feature}>
+                <span className={styles.featureIcon}>🌍</span>
+                <div>
+                  <span className={styles.featureTitle}>Corridors + volume</span>
+                  <span className={styles.featureDesc}>
+                    Pick destination countries and set monthly volume and avg payout size.
+                    Economics update live as you adjust the sliders.
+                  </span>
+                </div>
+              </div>
+              <div className={styles.feature}>
+                <span className={styles.featureIcon}>🏢</span>
+                <div>
+                  <span className={styles.featureTitle}>Sender eligibility</span>
+                  <span className={styles.featureDesc}>
+                    US Direct, UK Direct, or Connect platform. This filters which products are available
+                    before showing results.
                   </span>
                 </div>
               </div>
               <div className={styles.feature}>
                 <span className={styles.featureIcon}>📊</span>
                 <div>
-                  <span className={styles.featureTitle}>Deal composer</span>
+                  <span className={styles.featureTitle}>Results</span>
                   <span className={styles.featureDesc}>
-                    For AEs: build a deal by corridor, set custom pricing, and see your margin room.
-                    Exports a deal summary for Slack or email.
+                    Best product per corridor, full availability matrix, and a per-corridor economics
+                    table with margin estimates and summary totals.
                   </span>
                 </div>
               </div>
@@ -82,15 +107,15 @@ export function AboutModal({ onClose }: Props) {
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>Questions this is designed to answer</h2>
             <ol className={styles.questionList}>
-              <li>Does solution-first navigation (use case then product) work better than product-first?</li>
-              <li>Is the three-product side-by-side comparison easy to scan?</li>
-              <li>Does the margin meter in the deal composer give AEs the right guardrails?</li>
-              <li>What information is missing that PMs and AEs need in a real selling conversation?</li>
+              <li>Does solution-first navigation (goal then corridor) work better than product-first?</li>
+              <li>Is the three-product comparison easy to scan and act on?</li>
+              <li>Does the live economics view give PMs and AEs enough to have a pricing conversation?</li>
+              <li>What information is missing that teams need in a real selling conversation?</li>
             </ol>
           </section>
 
           <div className={styles.meta}>
-            <span>Built by jfranklin · April 2026</span>
+            <span>Built by jfranklin + emym · April 2026</span>
             <span className={styles.metaDot}>·</span>
             <a
               href="https://github.com/jfranklin-web/pip-prototype"
